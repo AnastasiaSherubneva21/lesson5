@@ -10,26 +10,19 @@ public class Ex51 {
 
         CommonResource1 commonResource1 = new CommonResource1();
 
+        Thread t = new Thread(new CountThread(commonResource));
+
+        t.setName("Thread 1");
+        System.out.println(t.getState());
+
+        t.start();
+        System.out.println(t.getState());
+
+        t.join();
+        System.out.println(t.getState());
+
         Thread t1 = new Thread(new CountThread1(commonResource1));
         Thread t2 = new Thread(new CountThread1(commonResource1));
-
-        for (int i = 1; i < 4; i++){
-
-            Thread t = new Thread(new CountThread(commonResource));
-            t.setName("Thread " + i);
-            if (t.getName().equals("Thread 1")) {
-                System.out.println(t.getState());
-            }
-            t.start();
-            if (t.getName().equals("Thread 1")) {
-                System.out.println(t.getState());
-            }
-
-            t.join();
-            if (t.getName().equals("Thread 1")) {
-                System.out.println(t.getState());
-            }
-        }
 
         t1.start();
         t2.start();
@@ -43,17 +36,19 @@ public class Ex51 {
 
 class CommonResource{
 
-    int x;
-    synchronized void increment(){
-        x = 1;
-        for (int i = 1; i < 4; i++){
-            x += 1;
+    synchronized void synchr(){
+
+        for (int i = 1; i < 3; i++){
             try{
                 Thread.sleep(1000);
                 Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
                 for (Thread t : threadSet) {
-                        //System.out.println(t.getName());
+                    if (t.getName().equals("Thread 1")) {
                         System.out.println(t.getState());
+                    }
+                    if (t.getName().equals("main")) {
+                        System.out.println(t.getState());
+                    }
                 }
             }
             catch(InterruptedException e){}
@@ -69,12 +64,12 @@ class CountThread implements Runnable{
     }
 
     public void run(){
-        res.increment();
+        res.synchr();
     }
 }
 
 class CommonResource1 {
-    synchronized void increment(){
+    synchronized void synchr(){
         while (true) {}
     }
 }
@@ -88,6 +83,6 @@ class CountThread1 implements Runnable {
     }
 
     public void run() {
-        res.increment();
+        res.synchr();
     }
 }

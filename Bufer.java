@@ -9,6 +9,7 @@ class Bufer {
 
 
     public void printVector() {
+        System.out.println("Список товаров в буфере:");
         for (Cupboard x : vector) {
             x.printInfo();
         }
@@ -31,8 +32,8 @@ class Bufer {
         Thread.sleep((long) t);
 
         vector.remove(0);
-        System.out.println("Покупатель купил 1 товар");
-        System.out.println("Товаров на складе: " + vector.size());
+        System.out.println("Потребитель забрал 1 товар");
+        System.out.println("Товаров в буфере: " + vector.size());
         printVector();
         notify();
     }
@@ -53,7 +54,7 @@ class Bufer {
                 .build();
         vector.add(vector.size(), newcpb);
         System.out.println("Производитель добавил 1 товар");
-        System.out.println("Товаров на складе: " + vector.size());
+        System.out.println("Товаров в буфере: " + vector.size());
         printVector();
         notify();
     }
